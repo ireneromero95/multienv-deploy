@@ -55,13 +55,14 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
 
-          ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts 2>/dev/null
-
-          # Deploy files via SCP
-           scp -v -i ~/.ssh/deploy_key -r index.html style.css app.js \
+            echo "=== 1. Keyscan ==="
+          ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
+          echo "=== 2. SCP ==="
+          scp -v -i ~/.ssh/deploy_key -r index.html style.css app.js \
             $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/ > /tmp/scp_out.txt 2>&1 || true
-
+          echo "=== 3. Output ==="
           cat /tmp/scp_out.txt
+          echo "=== 4. Done ==="
 
           echo "✅ Done"
 
