@@ -56,8 +56,14 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts 2>/dev/null
 
-          ssh -v -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-          $DEPLOY_USER@$DEPLOY_HOST "echo '✅ SSH funciona'" 2>&1
+           ssh -v -i ~/.ssh/deploy_key \
+            -o StrictHostKeyChecking=no \
+            $DEPLOY_USER@$DEPLOY_HOST \
+            "echo OK" > /tmp/ssh_out.txt 2>&1 || true
+
+          echo "=== SSH OUTPUT ==="
+          cat /tmp/ssh_out.txt
+          echo "=================="
 
           # Deploy files via SCP
           scp -i ~/.ssh/deploy_key -r index.html style.css app.js \
