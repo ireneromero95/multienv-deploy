@@ -43,6 +43,12 @@ jobs:
           echo "--- index.html preview ---"
           head -5 index.html
 
+      - name: Debug SSH
+        run: |
+          echo "Probando conexión SSH..."
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+          $DEPLOY_USER@$DEPLOY_HOST "echo '✅ SSH funciona'"
+
       - name: Deploy to EC2 via SSH
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
