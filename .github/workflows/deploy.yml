@@ -42,6 +42,14 @@ jobs:
           echo "✅ Placeholders replaced"
           echo "--- index.html preview ---"
           head -5 index.html
+      - name: 'PROBANDO LLAVE'
+        run: |
+          echo "=== Test internet ==="
+          curl -s https://ifconfig.me || echo "SIN INTERNET"
+          echo "=== Test DNS ==="
+          nslookup 13.221.5.102 || echo "DNS FALLO"
+          echo "=== Test directo ==="
+          nc -zv 13.221.5.102 22 || echo "PUERTO 22 BLOQUEADO"
 
       - name: Deploy to EC2 via SSH
         env:
