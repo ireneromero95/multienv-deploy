@@ -42,14 +42,6 @@ jobs:
           echo "✅ Placeholders replaced"
           echo "--- index.html preview ---"
           head -5 index.html
-      - name: 'PROBANDO LLAVE'
-        run: |
-          echo "=== Test internet ==="
-          curl -s https://ifconfig.me || echo "SIN INTERNET"
-          echo "=== Test DNS ==="
-          nslookup 13.221.5.102 || echo "DNS FALLO"
-          echo "=== Test directo ==="
-          nc -zv 13.221.5.102 22 || echo "PUERTO 22 BLOQUEADO"
 
       - name: Deploy to EC2 via SSH
         env:
@@ -60,19 +52,13 @@ jobs:
         run: |
           # Set up SSH key
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          printf '%s\n'"$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts 2>/dev/null
 
-            echo "=== 1. Keyscan A ==="
-          ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
-          echo "=== 2. SCP ==="
-          scp -v -i ~/.ssh/deploy_key -r index.html style.css app.js \
-            $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/ > /tmp/scp_out.txt 2>&1 || true
-          echo "=== 3. Output ==="
-          cat /tmp/scp_out.txt
-          echo "=== 4. Done ==="
-
-          echo "✅ Done"
+          # Deploy files via SCP
+          scp -i ~/.ssh/deploy_key -r index.html style.css app.js \
+            $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/
 
           echo "✅ Deployed to $DEPLOY_HOST:$DEPLOY_PATH"
 
