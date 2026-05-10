@@ -55,7 +55,7 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
 
-            echo "=== 1. Keyscan ==="
+            echo "=== 1. Keyscan A ==="
           ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
           echo "=== 2. SCP ==="
           scp -v -i ~/.ssh/deploy_key -r index.html style.css app.js \
