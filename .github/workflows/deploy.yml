@@ -54,14 +54,12 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          echo "Lineas en la clave: $(wc -l < ~/.ssh/deploy_key)"
-          echo "Primeros chars: $(head -1 ~/.ssh/deploy_key)"
 
           ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts 2>/dev/null
 
           # Deploy files via SCP
-          scp -i ~/.ssh/deploy_key -r index.html style.css app.js \
-            $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/
+          scp -v -i ~/.ssh/deploy_key -r index.html style.css app.js \
+            $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/ 2>&1
 
           echo "✅ Deployed to $DEPLOY_HOST:$DEPLOY_PATH"
 
