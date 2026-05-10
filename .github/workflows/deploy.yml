@@ -56,6 +56,11 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts 2>/dev/null
 
+           ssh -i ~/.ssh/deploy_key \
+            -o StrictHostKeyChecking=no \
+            -o LogLevel=DEBUG3 \
+            $DEPLOY_USER@$DEPLOY_HOST "echo OK" 2>&1 || true
+
           # Deploy files via SCP
           scp -i ~/.ssh/deploy_key -r index.html style.css app.js \
             $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/
