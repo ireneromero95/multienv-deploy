@@ -55,7 +55,7 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           echo "Lineas en la clave: $(wc -l < ~/.ssh/deploy_key)"
-          echo "Primeros chars: $(head -1 ~/.ssh/deploy_key)""
+          echo "Primeros chars: $(head -1 ~/.ssh/deploy_key)"
 
           ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts 2>/dev/null
 
